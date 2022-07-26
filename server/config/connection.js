@@ -5,4 +5,6 @@ mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/Project', {
   useUnifiedTopology: true
 });
 
-module.exports = mongoose.connection;
+var db = mongoose.connection;
+
+module.exports = db;
