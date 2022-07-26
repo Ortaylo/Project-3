@@ -7,8 +7,8 @@ const resolvers = {
             return User.find();
         },
         user: async (parent, {username}) => {
-            console.log(User.findOne({username}).select('-__v -password'))
-            return User.findOne({username}).select('-__v -password');
+            console.log(User.findOne({username}))
+            return User.findOne({username})
         }
     },
     Mutation: {
@@ -35,6 +35,34 @@ const resolvers = {
             console.log(correctPw)
             return {token,user};
 
+        },
+        sendMessage: async (parent, {sender,receiver,messageText}) => {
+            
+            const user = await User.findOneAndUpdate(
+                { username: receiver },
+                { $push: { messages: { sender: sender,receiver: receiver, messageText:messageText } } },
+                { new: true }
+              );
+              await User.findOneAndUpdate(
+                { username: sender },
+                { $push: { messages: { sender:sender,receiver: receiver, messageText:messageText } } }
+              )
+            if (!user) {
+                throw new AuthenticationError('Incorrect credentials: No User Found');
+              }
+              console.log(user)
+              return user
+            
+              
+
+        },
+        removeMessage: async (parent,{username,messageId}) => {
+            const user = await User.findOneAndUpdate(
+                {username: username},
+                {$pull: {messages: {_id: messageId}}},
+                {new: true}
+            )
+                return user
         }
     }
 }

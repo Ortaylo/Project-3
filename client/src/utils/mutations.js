@@ -15,6 +15,12 @@ mutation Login($email: String!, $password: String!) {
   user {
     username
     email
+    
+    messages{
+      sender
+      receiver
+      messageText
+    }
   }
   }
 }
