@@ -10,6 +10,7 @@ export default function LoginForm() {
     const {name,value} = e.target;
     setUserData({...userData,[name] : value})
     console.log(userData)
+    
   }
   const handleFormSubmit = async () => {
     const {username,email,password} = userData

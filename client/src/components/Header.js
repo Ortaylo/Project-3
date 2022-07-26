@@ -1,22 +1,18 @@
-import React from "react";
-import { useMutation } from '@apollo/client';
-const {ADD_USER} = require('../utils/mutations')
+import React, {useContext} from "react";
+import { useQuery } from '@apollo/client';
+const {GET_USERS} = require('../utils/queries')
 export default function Header() {
-    const [addUser, {data,loading, error }] = useMutation(ADD_USER);
-
-  const test = async () => {
-    await addUser({variables: {username: 'TestUser', email: 'test@email.com', password: 'testPassword'}})
-    if(loading) {
-        console.log(loading)
-    } else {
-        console.log(data)
-        console.log(error)
+    const {data,loading,error} = useQuery(GET_USERS)
+    if(error){
+      console.log(error) 
+    }
+    if(!loading && !error){
+      console.log('111',data.users.find(o => o.username === 'TestUser'))
     }
 
-  }
     return (
     <div>
-        <button onClick={test}>CLICK</button>
+        {context.user && <button onClick={console.log(context)}>LOGOUT</button>}
     </div>
 )
-}
+} 

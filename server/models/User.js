@@ -1,5 +1,6 @@
 const { Schema, model } = require('mongoose');
 const bcrypt = require('bcrypt');
+const messageSchema = require('./Message');
 
 const userSchema = new Schema(
   {
@@ -17,7 +18,8 @@ const userSchema = new Schema(
     password: {
       type: String,
       required: true,
-    }
+    },
+    messages:[messageSchema]
   }
 );
 userSchema.pre('save', async function (next) {
