@@ -29,9 +29,7 @@ export default function Profile(props) {
             {!loading && messages && 
                 messages.map(message=>(
                 <div>
-                <h4>
-                {message.sender}
-                </h4>
+                <h4>{message.sender}</h4>
                 <h3>{message.messageText}</h3>
                 </div>
             ))}

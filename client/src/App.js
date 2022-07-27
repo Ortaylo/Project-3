@@ -11,11 +11,12 @@ function App() {
   
   return (
     <div>
-      <button onClick={context.logout}>LOGOUT</button>
-      <a href='/profile'><h3>Profile</h3></a>
+      {context.user !== null &&<button onClick={context.logout}>LOGOUT</button>}
+      {context.user &&<a href='/profile'><h3>Profile</h3></a>}
+      {context.user === null && (<a href='/login'>LOGIN</a>)}
       <Router>
         <Switch>
-          <Route exact path='/' component={SignupForm} />
+          <Route exact path='/signup' component={SignupForm} />
           <Route exact path='/login' component={LoginForm}/>
           <Route exact path='/profile' 
           render={() => <Profile {...context.user} authed={true} />}/>

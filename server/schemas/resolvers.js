@@ -15,7 +15,9 @@ const resolvers = {
         addUser: async (parent, args) => {
             console.log(args)
             const user = await User.create(args);
-            return user
+            const token = signToken(user)
+
+            return {token,user}
         },
         removeUser: async (parent, {username}) => {
             return User.remove({username: username})
@@ -52,9 +54,6 @@ const resolvers = {
               }
               console.log(user)
               return user
-            
-              
-
         },
         removeMessage: async (parent,{username,messageId}) => {
             const user = await User.findOneAndUpdate(
@@ -62,7 +61,7 @@ const resolvers = {
                 {$pull: {messages: {_id: messageId}}},
                 {new: true}
             )
-                return user
+            return user
         }
     }
 }
