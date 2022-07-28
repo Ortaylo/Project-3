@@ -1,4 +1,4 @@
-const { Schema, model } = require('mongoose');
+const { Schema, model, Types } = require('mongoose');
 const bcrypt = require('bcrypt');
 const messageSchema = require('./Message');
 
@@ -19,7 +19,12 @@ const userSchema = new Schema(
       type: String,
       required: true,
     },
-    messages:[messageSchema]
+    messages:[messageSchema],
+    recipes:[
+      {
+      type: String
+    },
+    ]
   }
 );
 
