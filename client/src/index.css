@@ -1,5 +1,6 @@
+
 .chatMessage{
-background-color: orange;
+background-color: wheat;
 display: block;
 }
 .hidden{
@@ -7,19 +8,30 @@ display: none;
 padding: 1% 0;
 }
 .sender{
-    max-width: 100px;
-    max-height: 100px;
-    padding: 30px;
-    font-size: 20px;
+    min-width: 30px;
+    text-align: center;
+    padding: 0px;
+    font-size: 35px;
     background-color: aqua;
 }
 .Chats{
     display: flex;
     align-items: end;
     flex-direction: column;
+    
 }
 .Chat{
-    text-align: end;
-    max-width: 20%;
-    max-height: 40%;
+    border: 2px double grey;
+    text-align: center;
+    min-width: 180px;
+    font-size: 30px;
+    
+}
+.messageText{
+    background-color: wheat;
+}
+.messageForm{
+    display: flex;
+    align-items: end;
+    flex-direction: column;
 }

@@ -5,6 +5,7 @@ import LoginForm from './components/LoginForm';
 import {useAuthContext} from './context/authContext'
 import Profile from './components/Profile';
 import UserProfile from './components/UserProfile';
+import SearchPage from './components/SearchPage';
 function App() {
   const context = useAuthContext();
   console.log('APP',context)
@@ -16,6 +17,8 @@ function App() {
       {context.user === null && (<a href='/login'>LOGIN</a>)}
       <Router>
         <Switch>
+        <Route exact path='/searchpage' component={SearchPage} />
+
           <Route exact path='/signup' component={SignupForm} />
           <Route exact path='/login' component={LoginForm}/>
           <Route exact path='/profile' 

@@ -2,6 +2,13 @@ const {gql} = require('apollo-server-express');
 
 const typeDefs = gql`
 
+  type Recipe {
+    _id: ID
+    recipeName: String
+    ingredients: [String]
+    estimatedTime: String
+    description: String
+  }
   type Message {
     _id: ID
     sender: String
@@ -22,18 +29,26 @@ const typeDefs = gql`
     user: User
   }
 
-
+  input RecipeInput{
+    recipeName: String
+    ingredients: [String]
+    estimatedTime: String
+    description: String
+  }
   type Query {
     users: [User]
     user(username: String!): User
+    recipes: [Recipe]
+    recipe(_id: ID!):Recipe
   }
-  
   type Mutation {
     addUser(username: String!, email: String!, password: String!): Auth
     sendMessage(sender: String,receiver: String, messageText: String!): User
     removeMessage(username: String!,messageId: ID!): User
     removeUser(username: String!): User
     login(email: String!, password: String!): Auth
+    addRecipe(input: RecipeInput!): Recipe
+    removeRecipe(_id: ID!): Recipe
   }`;
 
 module.exports = typeDefs
