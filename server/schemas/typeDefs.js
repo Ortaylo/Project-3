@@ -22,7 +22,7 @@ const typeDefs = gql`
     email: String
     password: String
     messages: [Message]
-    recipes: [Recipe]
+    recipes: [String]
   }
 
   type Auth {

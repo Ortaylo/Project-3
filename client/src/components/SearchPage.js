@@ -38,7 +38,6 @@ export default  function SearchPage(){
             }}})
       }
     if(loading){
-        
         return (
             <div>
                 LOADING...

@@ -11,6 +11,7 @@ query user($username: String!) {
       receiver
       messageText
     }
+    recipes
   }
 }
 `
