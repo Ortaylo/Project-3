@@ -1,12 +1,30 @@
+* {
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
+body {
+  background-color: rgb(244,244,244);
+}
+
+.menu {
+  display: flex;
+  flex-direction: row;
+  padding-left: 5px;
+  gap: 20px;
+}
 
 .chatMessage{
 background-color: wheat;
 display: block;
+
 }
-.hidden{
+
+.hidden {
 display: none;
 padding: 1% 0;
+
 }
+
 .sender{
     min-width: 30px;
     text-align: center;
@@ -14,24 +32,57 @@ padding: 1% 0;
     font-size: 35px;
     background-color: aqua;
 }
-.Chats{
-    display: flex;
-    align-items: end;
-    flex-direction: column;
-    
+
+.chatbox {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+  margin-right: 50%;
+  width: 200px;
+  display: flex;
+  flex-direction: column;
 }
-.Chat{
+
+#chat {
     border: 2px double grey;
     text-align: center;
     min-width: 180px;
-    font-size: 30px;
-    
+    font-size: 25px;
 }
+
 .messageText{
     background-color: wheat;
 }
-.messageForm{
+
+.messageForm {
     display: flex;
-    align-items: end;
     flex-direction: column;
+    width: 200px;
+}
+
+#recipe-form {
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  justify-content: space-evenly;
+  height: 500px;
+
+}
+
+#recipe-form input {
+  border-radius: 4px;
+  padding: 5px;
+}
+
+.recipe-card {
+  border: solid 3px black;
+  border-radius: 5px;
+  background-color: wheat;
+  padding: 20px;
+}
+
+.profile-info {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }

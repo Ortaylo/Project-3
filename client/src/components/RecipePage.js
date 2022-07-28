@@ -5,12 +5,13 @@ import { ADD_RECIPE } from '../utils/mutations'
 // "ingredients":["testINgedeint1","ingredient2"],
 //     "estimatedTime": "testEstimateTime2",
 //     "description": "testDescription2
-export default  function SearchPage(){
-    const [recipeFormData,setRecipeFormData] = useState({recipeName: '', ingredients: [],estimatedTime:'',description:''})
-    const [ingredientsText,setIngredientsText] = useState('')
+export default  function RecipePage(){
+    const [recipeFormData, setRecipeFormData] = useState({recipeName: '', ingredients: [], estimatedTime:'',description:''})
+    const [ingredientsText, setIngredientsText] = useState('')
     const [addRecipe,{newRecipeData}] = useMutation(ADD_RECIPE)
 
     const {data,loading,error} = useQuery(GET_RECIPES)
+
     const handleChange = (e) => {
         e.preventDefault();
         if(e.target.name === 'ingredientsText'){
@@ -19,7 +20,7 @@ export default  function SearchPage(){
         }
         const {name,value} = e.target;
         setRecipeFormData({...recipeFormData,[name] : value})
-        console.log(recipeFormData)
+        console.log('DATA',recipeFormData)
       }
       const addIngredient = (event) => {
         event.preventDefault();
@@ -27,9 +28,11 @@ export default  function SearchPage(){
         ingredients.push(ingredientsText);
         setRecipeFormData({ingredients: ingredients})
       }
-      const handleFormSubmit = (event) => {
+
+      const handleFormSubmit = async (event) => {
         event.preventDefault();
-        addRecipe({variables:{
+        console.log('NULL',recipeFormData)
+         addRecipe({variables:{
             input:{
                 recipeName: recipeFormData.recipeName,
                  ingredients: recipeFormData.ingredients,
@@ -52,33 +55,34 @@ export default  function SearchPage(){
 
     return(
         <div>
-            <h1>Hi</h1>
-            <button>TEST</button>
+          <h1>Recipe Page</h1>
             {!loading && data.recipes.map(recipe => (
-                <div>
-                   Name:<p>{recipe.recipeName}</p>
-                   estimatedTime:<p>{recipe.estimatedTime}</p>
-                   ingredients:{recipe.ingredients &&
+                <div class="recipe-card">
+                  Name:<p>{recipe.recipeName}</p>
+                   Estimated Time <p>{recipe.estimatedTime}</p>
+                   Ingredients: {recipe.ingredients &&
                     recipe.ingredients.map(ingredient => (
                         <p>{ingredient}</p>
                     ))}
-                   description:<p>{recipe.description}</p>
+                   Description<p>{recipe.description}</p>
                 </div>
             )
 
             )}
             { !loading && (
-            <form className="recipeForm">
-            Name:<input name="recipeName" defaultValue={recipeFormData.recipeName} onBlur={handleChange}></input>
-            <div>
-            Ingredients:<input name="ingredientsText" defaultValue={ingredientsText} onBlur={handleChange}></input>
-            <button onClick={addIngredient} className='ingredientBtn'>Add Ingredient</button>
-
-            </div>
-            description:<textarea name="description" className="description" defaultValue={recipeFormData.description} onBlur={handleChange}></textarea>
-            estimatedTime:<input name="estimatedTime" defaultValue={recipeFormData.estimatedTime} onBlur={handleChange}></input>
+            <form id="recipe-form">
+              <label for="recipeName">Name:</label>
+              <input name="recipeName" defaultValue={recipeFormData.recipeName} onChange={handleChange}></input>
             
-                    <button onClick={handleFormSubmit} className='recipeBtn'>Add Recipe</button>
+              <label for="ingredientsText">Ingredients:</label>
+              <input name="ingredientsText" defaultValue={ingredientsText} onChange={handleChange}></input>
+              <button onClick={addIngredient} className='ingredientBtn'>Add Ingredient</button>
+
+              <label for="description">description:</label>
+              <textarea name="description" className="description" defaultValue={recipeFormData.description} onChange={handleChange}></textarea>
+              <label for="estimatedTime">estimatedTime:</label>
+              <input name="estimatedTime" defaultValue={recipeFormData.estimatedTime} onChange={handleChange}></input>
+              <button onClick={handleFormSubmit} className='recipeBtn'>Add Recipe</button>
             </form>
 )}
         </div>
