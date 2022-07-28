@@ -20,9 +20,8 @@ export default  function RecipePage(){
         }
         const {name,value} = e.target;
         setRecipeFormData({...recipeFormData,[name] : value})
-        console.log(recipeFormData)
+        console.log('DATA',recipeFormData)
       }
-
       const addIngredient = (event) => {
         event.preventDefault();
         var ingredients = recipeFormData.ingredients;
@@ -30,9 +29,10 @@ export default  function RecipePage(){
         setRecipeFormData({ingredients: ingredients})
       }
 
-      const handleFormSubmit = (event) => {
+      const handleFormSubmit = async (event) => {
         event.preventDefault();
-        addRecipe({variables:{
+        console.log('NULL',recipeFormData)
+         addRecipe({variables:{
             input:{
                 recipeName: recipeFormData.recipeName,
                  ingredients: recipeFormData.ingredients,
@@ -41,7 +41,6 @@ export default  function RecipePage(){
             }}})
       }
     if(loading){
-        
         return (
             <div>
                 LOADING...
@@ -59,7 +58,7 @@ export default  function RecipePage(){
           <h1>Recipe Page</h1>
             {!loading && data.recipes.map(recipe => (
                 <div class="recipe-card">
-                  <p>{recipe.recipeName}</p>
+                  Name:<p>{recipe.recipeName}</p>
                    Estimated Time <p>{recipe.estimatedTime}</p>
                    Ingredients: {recipe.ingredients &&
                     recipe.ingredients.map(ingredient => (
@@ -73,16 +72,16 @@ export default  function RecipePage(){
             { !loading && (
             <form id="recipe-form">
               <label for="recipeName">Name:</label>
-              <input name="recipeName" defaultValue={recipeFormData.recipeName} onBlur={handleChange}></input>
+              <input name="recipeName" defaultValue={recipeFormData.recipeName} onChange={handleChange}></input>
             
               <label for="ingredientsText">Ingredients:</label>
-              <input name="ingredientsText" defaultValue={ingredientsText} onBlur={handleChange}></input>
+              <input name="ingredientsText" defaultValue={ingredientsText} onChange={handleChange}></input>
               <button onClick={addIngredient} className='ingredientBtn'>Add Ingredient</button>
 
               <label for="description">description:</label>
-              <textarea name="description" className="description" defaultValue={recipeFormData.description} onBlur={handleChange}></textarea>
+              <textarea name="description" className="description" defaultValue={recipeFormData.description} onChange={handleChange}></textarea>
               <label for="estimatedTime">estimatedTime:</label>
-              <input name="estimatedTime" defaultValue={recipeFormData.estimatedTime} onBlur={handleChange}></input>
+              <input name="estimatedTime" defaultValue={recipeFormData.estimatedTime} onChange={handleChange}></input>
               <button onClick={handleFormSubmit} className='recipeBtn'>Add Recipe</button>
             </form>
 )}
