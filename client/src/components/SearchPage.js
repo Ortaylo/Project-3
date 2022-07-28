@@ -1,50 +1,87 @@
 import React, {useState} from 'react'
-
+import { GET_RECIPES } from '../utils/queries'
+import { useQuery,useMutation } from '@apollo/client'
+import { ADD_RECIPE } from '../utils/mutations'
+// "ingredients":["testINgedeint1","ingredient2"],
+//     "estimatedTime": "testEstimateTime2",
+//     "description": "testDescription2
 export default  function SearchPage(){
-    const [Auth,setAuth] =useState(false)
-    const [recipeData,setRecipeData] = useState([{img: '', link: '', label: ''}])
+    const [recipeFormData,setRecipeFormData] = useState({recipeName: '', ingredients: [],estimatedTime:'',description:''})
+    const [ingredientsText,setIngredientsText] = useState('')
+    const [addRecipe,{newRecipeData}] = useMutation(ADD_RECIPE)
 
-    const test = async () => {
-        const hits = await fetch('https://api.edamam.com/api/recipes/v2?type=public&q=cookie&app_id=0637c2e7&app_key=d01b1197825271e3271e1c4e7c26646f&mealType=Snack&dishType=Biscuits%20and%20cookies&imageSize=SMALL&random=true')
-        .then(response => response.json())
-        .then(function(data) { 
-            console.log(data);
-            console.log(data.hits[0].recipe);
-            // recipeImg.setAttribute('src',data.hits[0].recipe.image);
-            // recipeLink.setAttribute('href',data.hits[0].recipe.shareAs);
-            // recipeName.textContent = data.hits[0].recipe.label;
-            // console.log(data.hits[0].recipe.shareAs);
-            // localStorage.setItem('recipe-link',data.hits[0].recipe.url);
-            // localStorage.setItem('recipe-name',data.hits[0].recipe.label);
-            // localStorage.setItem('recipe-img',data.hits[0].recipe.image);
-            
-            
-            return data.hits
-        }).catch(err => console.error(err));
-        for(var i = 0;i<hits;i++){
-            setRecipeData(recipeData.push({img:hits[i].recipe.image,link:hits[i].recipe.shareAs,label:hits[i].recipe.label}))
+    const {data,loading,error} = useQuery(GET_RECIPES)
+    const handleChange = (e) => {
+        e.preventDefault();
+        if(e.target.name === 'ingredientsText'){
+            setIngredientsText(e.target.value)
+            console.log('ingre',ingredientsText)
         }
-        setAuth(true)
-        console.log('PRO',hits)
-        return hits;
+        const {name,value} = e.target;
+        setRecipeFormData({...recipeFormData,[name] : value})
+        console.log(recipeFormData)
+      }
+      const addIngredient = (event) => {
+        event.preventDefault();
+        var ingredients = recipeFormData.ingredients;
+        ingredients.push(ingredientsText);
+        setRecipeFormData({ingredients: ingredients})
+      }
+      const handleFormSubmit = (event) => {
+        event.preventDefault();
+        addRecipe({variables:{
+            input:{
+                recipeName: recipeFormData.recipeName,
+                 ingredients: recipeFormData.ingredients,
+                 estimatedTime:recipeFormData.estimatedTime,
+                 description:recipeFormData.description
+            }}})
+      }
+    if(loading){
+        
+        return (
+            <div>
+                LOADING...
+            </div>
+        )
+    } else if(!loading){
+        console.log(data)
+        console.log(data.recipes[0])
+        console.log(data.recipes.length)
     }
-    const recipes = test();
-	console.log(recipes)
-    console.log('AUTH',Auth)
-    const test2 = () => {
-        console.log(recipeData)
-    }
+    
+
     return(
         <div>
             <h1>Hi</h1>
-            <button onClick={test2}>TEST</button>
-            {recipeData[20] && recipeData.map(recipe => (
+            <button>TEST</button>
+            {!loading && data.recipes.map(recipe => (
                 <div>
-                    {recipe.label}
+                   Name:<p>{recipe.recipeName}</p>
+                   estimatedTime:<p>{recipe.estimatedTime}</p>
+                   ingredients:{recipe.ingredients &&
+                    recipe.ingredients.map(ingredient => (
+                        <p>{ingredient}</p>
+                    ))}
+                   description:<p>{recipe.description}</p>
                 </div>
             )
 
             )}
+            { !loading && (
+            <form className="recipeForm">
+            Name:<input name="recipeName" defaultValue={recipeFormData.recipeName} onBlur={handleChange}></input>
+            <div>
+            Ingredients:<input name="ingredientsText" defaultValue={ingredientsText} onBlur={handleChange}></input>
+            <button onClick={addIngredient} className='ingredientBtn'>Add Ingredient</button>
+
+            </div>
+            description:<textarea name="description" className="description" defaultValue={recipeFormData.description} onBlur={handleChange}></textarea>
+            estimatedTime:<input name="estimatedTime" defaultValue={recipeFormData.estimatedTime} onBlur={handleChange}></input>
+            
+                    <button onClick={handleFormSubmit} className='recipeBtn'>Add Recipe</button>
+            </form>
+)}
         </div>
     )
 }

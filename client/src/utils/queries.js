@@ -22,3 +22,15 @@ query Users {
   }
 }
 `
+
+export const GET_RECIPES = gql `
+query Query {
+  recipes {
+    _id
+    recipeName
+    ingredients
+    estimatedTime
+    description
+  }
+}
+`
