@@ -4,8 +4,8 @@ import { AuthContext, useAuthContext } from "../context/authContext";
 const {GET_USER} = require('../utils/queries')
 const {SEND_MESSAGE} = require('../utils/mutations')
 export default function Profile(props) {
-    const [sendMessage,{messageData,messageError}] = useMutation(SEND_MESSAGE)
-    const [messageTextData,setMessageData] = useState({})
+    const [sendMessage,{messageData}] = useMutation(SEND_MESSAGE)
+    const [messageFormData,setMessageFormData] = useState({receiver: '', messageText: ''})
     if(!localStorage.getItem("token")){
         window.location.replace('/login')
     }
@@ -46,7 +46,7 @@ export default function Profile(props) {
         
     }
     }
-    // console.log('Final',chats)
+    console.log('Final',chats)
    }
    
    function whatChat(chat){
@@ -68,15 +68,16 @@ export default function Profile(props) {
         // console.log(children[i])
     }
    }
-   const sendAMessage = (event) => {
+   const sendAMessage = async (event) => {
     event.preventDefault()
-    console.log(messageTextData)
-    console.log(event.target.value)
+    console.log(messageFormData)
+    const newMessage = await sendMessage({variables: {sender:username,receiver:messageFormData.receiver,messageText:messageFormData.messageText}})
+    console.log(newMessage)
    }
    const handleChange = (e) => {
     e.preventDefault();
-    const {value} = e.target;
-    setMessageData(value)
+    const {name,value} = e.target;
+    setMessageFormData({...messageFormData,[name] : value})
     
   }
       return (
@@ -91,20 +92,24 @@ export default function Profile(props) {
             <aside className="Chats">
             {!loading && messages && 
                 chats.map(chat=>(
-                    <div onClick={revealChat} className="Chat">
+                    <div onClick={revealChat} key={chat[0]._id + "3"} className="Chat">
                         {whatChat(chat)}
                     {chat && chat.map(message=>(
-                        <div className="hidden">
-                        <h4 className="sender">{message.sender}</h4>
-                        <h3 className="messageText">{message.messageText}</h3>
+                        <div className="hidden"key={message._id}>
+                        <p className="sender">{message.sender}</p>
+                        <p className="messageText">{message.messageText}</p>
                         </div>
                     ))}
-                    Message:<textarea className="messageText" name={whatChat(chat)} value={messageTextData} onChange={handleChange}></textarea>
-                    <button onClick={sendAMessage} name={whatChat(chat)}>Send Message</button>
+                    
                     </div>
 
             ))}
             </aside>
+            <form className="messageForm">
+            receiver:<input name="receiver" defaultValue={messageFormData.receiver} onBlur={handleChange}></input>
+            Message:<textarea name="messageText" className="messageTextArea" defaultValue={messageFormData.messageText} onBlur={handleChange}></textarea>
+                    <button onClick={sendAMessage} className='messageBtn'>Send Message</button>
+            </form>
         </div>
     )
     
