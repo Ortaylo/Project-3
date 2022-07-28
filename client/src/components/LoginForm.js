@@ -51,6 +51,7 @@ export default function LoginForm() {
       PASSWORD<input name="password" value={userData.password} onChange={handleChange}></input>
 
       <button onClick={handleFormSubmit}>Login</button>
+      <a href="/signup">Need to sign up?</a>
     </form>
   )
 }

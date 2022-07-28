@@ -1,23 +1,84 @@
-import React, { useContext } from "react";
-import { useQuery } from '@apollo/client';
+import React, { useContext,useState } from "react";
+import { useMutation, useQuery } from '@apollo/client';
 import { AuthContext, useAuthContext } from "../context/authContext";
 const {GET_USER} = require('../utils/queries')
+const {SEND_MESSAGE} = require('../utils/mutations')
 export default function Profile(props) {
+    const [sendMessage,{messageData,messageError}] = useMutation(SEND_MESSAGE)
+    const [messageTextData,setMessageData] = useState({})
     if(!localStorage.getItem("token")){
         window.location.replace('/login')
     }
    const  {_id,email,username} = props.data
-   console.log('Profile',props)
    const context = useAuthContext();
-   const {data,loading,error} =useQuery(GET_USER,{variables: {username: 'TestUser'}})
+   const {data,loading,error} =useQuery(GET_USER,{variables: {username: username}})
    var messages;
+   var messageArr = [];
+   var chats = [];
    if(!loading){
-    console.log('Profile2',data)
+    // console.log('Profile2',data)
     messages = data.user.messages
+    if(!messages){
+        return
+    }
+    for(var i=0;i<messages.length;i++){
+        var tempSender = messages[i].sender
+        var tempReceiver = messages[i].receiver
+        messageArr.push(tempSender,tempReceiver)
+    }
+    // console.log(messageArr)
+            messageArr = [...new Set(messageArr)]
+    for(var i=0;i < messageArr.length;i++){
+        if(messageArr[i] === username){
+            messageArr.splice(i,1)
+        }
+        // console.log('Final',messageArr)
+    }
+    for(var c=0;c < messageArr.length;c++){
+        chats.push([])
+    for(var i=0;i <messages.length;i++){
+        if(messages[i].sender === messageArr[c]){
+            chats[c].push(messages[i])
+        }
+        if(messages[i].receiver === messageArr[c]){
+            chats[c].push(messages[i])
+        }
+        
+    }
+    }
+    // console.log('Final',chats)
    }
    
-   
+   function whatChat(chat){
+    if(chat[0].sender == username){
+        return chat[0].receiver
+    } else {
+        return chat[0].sender
+    }
+   }
+   const revealChat = (event) => {
+    var children = event.target.children
+    for(var i=0;i<children.length;i++){
+        if(children[i].className === 'hidden'){
+            children[i].setAttribute('class','chatMessage')
+        } else if (children[i].className === 'chatMessage') {
+            // children[i].setClass()
+            children[i].setAttribute('class','hidden')
+        }
+        // console.log(children[i])
+    }
+   }
+   const sendAMessage = (event) => {
+    event.preventDefault()
+    console.log(messageTextData)
+    console.log(event.target.value)
+   }
+   const handleChange = (e) => {
+    e.preventDefault();
+    const {value} = e.target;
+    setMessageData(value)
     
+  }
       return (
         <div>
             <h1>Profile</h1>
@@ -26,15 +87,24 @@ export default function Profile(props) {
             {loading && (
                 <h3>LOADING...</h3>
             )}
+
+            <aside className="Chats">
             {!loading && messages && 
-                messages.map(message=>(
-                <div>
-                <h4>
-                {message.sender}
-                </h4>
-                <h3>{message.messageText}</h3>
-                </div>
+                chats.map(chat=>(
+                    <div onClick={revealChat} className="Chat">
+                        {whatChat(chat)}
+                    {chat && chat.map(message=>(
+                        <div className="hidden">
+                        <h4 className="sender">{message.sender}</h4>
+                        <h3 className="messageText">{message.messageText}</h3>
+                        </div>
+                    ))}
+                    Message:<textarea className="messageText" name={whatChat(chat)} value={messageTextData} onChange={handleChange}></textarea>
+                    <button onClick={sendAMessage} name={whatChat(chat)}>Send Message</button>
+                    </div>
+
             ))}
+            </aside>
         </div>
     )
     
