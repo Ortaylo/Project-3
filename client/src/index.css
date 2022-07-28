@@ -1,0 +1,25 @@
+.chatMessage{
+background-color: orange;
+display: block;
+}
+.hidden{
+display: none;
+padding: 1% 0;
+}
+.sender{
+    max-width: 100px;
+    max-height: 100px;
+    padding: 30px;
+    font-size: 20px;
+    background-color: aqua;
+}
+.Chats{
+    display: flex;
+    align-items: end;
+    flex-direction: column;
+}
+.Chat{
+    text-align: end;
+    max-width: 20%;
+    max-height: 40%;
+}
