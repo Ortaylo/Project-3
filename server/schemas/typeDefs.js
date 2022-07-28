@@ -22,6 +22,7 @@ const typeDefs = gql`
     email: String
     password: String
     messages: [Message]
+    recipes: [String]
   }
 
   type Auth {
@@ -49,6 +50,7 @@ const typeDefs = gql`
     login(email: String!, password: String!): Auth
     addRecipe(input: RecipeInput!): Recipe
     removeRecipe(_id: ID!): Recipe
+    addRecipeToUser(userId:ID!,recipeId:ID!): User
   }`;
 
 module.exports = typeDefs

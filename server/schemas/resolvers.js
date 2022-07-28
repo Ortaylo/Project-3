@@ -21,6 +21,9 @@ const resolvers = {
         addUser: async (parent, args) => {
             console.log(args)
             const user = await User.create(args);
+            if(!user){
+                throw new AuthenticationError('No User Created')
+            }
             const token = signToken(user)
 
             return {token,user}
@@ -77,6 +80,13 @@ const resolvers = {
         },
         removeRecipe: async (parent, {_id}) => {
             return Recipe.remove({_id: _id})
+        },
+        addRecipeToUser: async (parent, {userId,recipeId}) => {
+            return User.findByIdAndUpdate(
+                {_id:userId},
+                {$addToSet: {recipes:recipeId}},
+                {new:true}
+            )
         },
     }
 }

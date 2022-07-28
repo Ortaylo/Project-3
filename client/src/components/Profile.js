@@ -16,7 +16,7 @@ export default function Profile(props) {
    var messageArr = [];
    var chats = [];
    if(!loading){
-    // console.log('Profile2',data)
+    console.log('Profile2',data)
     messages = data.user.messages
     if(!messages){
         return
