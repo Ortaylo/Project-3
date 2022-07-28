@@ -5,19 +5,22 @@ import LoginForm from './components/LoginForm';
 import {useAuthContext} from './context/authContext'
 import Profile from './components/Profile';
 import UserProfile from './components/UserProfile';
-import SearchPage from './components/SearchPage';
+import RecipePage from './components/RecipePage';
 function App() {
   const context = useAuthContext();
   console.log('APP',context)
   
   return (
     <div>
-      {context.user !== null &&<button onClick={context.logout}>LOGOUT</button>}
-      {context.user &&<a href='/profile'><h3>Profile</h3></a>}
-      {context.user === null && (<a href='/login'>LOGIN</a>)}
+      <header class="menu">
+        {context.user &&<a href='/profile'><h3>Profile</h3></a>}
+        {context.user !== null &&<button onClick={context.logout}>LOGOUT</button>}
+        {context.user === null && (<a href='/login'>LOGIN</a>)}
+        {context.user !== null && <a href='/RecipePage'>Recipes</a>}
+      </header>
       <Router>
         <Switch>
-        <Route exact path='/searchpage' component={SearchPage} />
+        <Route exact path='/RecipePage' component={RecipePage} />
 
           <Route exact path='/signup' component={SignupForm} />
           <Route exact path='/login' component={LoginForm}/>
