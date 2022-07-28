@@ -32,3 +32,17 @@ mutation Login($email: String!, $password: String!) {
   }
 }
 `
+
+export const SEND_MESSAGE = gql `
+mutation SendMessage($messageText: String!, $receiver: String, $sender: String) {
+  sendMessage(messageText: $messageText, , receiver: $receiver, sender: $sender) {
+    _id
+    username
+    email
+      messages {
+        sender
+        messageText
+      }
+  }
+}
+`

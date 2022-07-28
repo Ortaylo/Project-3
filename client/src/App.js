@@ -4,7 +4,7 @@ import SignupForm from './components/SignupForm';
 import LoginForm from './components/LoginForm';
 import {useAuthContext} from './context/authContext'
 import Profile from './components/Profile';
-
+import UserProfile from './components/UserProfile';
 function App() {
   const context = useAuthContext();
   console.log('APP',context)

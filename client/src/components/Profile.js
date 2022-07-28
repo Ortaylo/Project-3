@@ -1,8 +1,11 @@
-import React, { useContext } from "react";
-import { useQuery } from '@apollo/client';
+import React, { useContext,useState } from "react";
+import { useMutation, useQuery } from '@apollo/client';
 import { AuthContext, useAuthContext } from "../context/authContext";
 const {GET_USER} = require('../utils/queries')
+const {SEND_MESSAGE} = require('../utils/mutations')
 export default function Profile(props) {
+    const [sendMessage,{messageData,messageError}] = useMutation(SEND_MESSAGE)
+    const [messageTextData,setMessageData] = useState({})
     if(!localStorage.getItem("token")){
         window.location.replace('/login')
     }
@@ -13,7 +16,7 @@ export default function Profile(props) {
    var messageArr = [];
    var chats = [];
    if(!loading){
-    console.log('Profile2',data)
+    // console.log('Profile2',data)
     messages = data.user.messages
     if(!messages){
         return
@@ -22,15 +25,14 @@ export default function Profile(props) {
         var tempSender = messages[i].sender
         var tempReceiver = messages[i].receiver
         messageArr.push(tempSender,tempReceiver)
-        
     }
-    console.log(messageArr)
+    // console.log(messageArr)
             messageArr = [...new Set(messageArr)]
     for(var i=0;i < messageArr.length;i++){
         if(messageArr[i] === username){
             messageArr.splice(i,1)
         }
-        console.log('Final',messageArr)
+        // console.log('Final',messageArr)
     }
     for(var c=0;c < messageArr.length;c++){
         chats.push([])
@@ -44,7 +46,7 @@ export default function Profile(props) {
         
     }
     }
-    console.log('Final',chats)
+    // console.log('Final',chats)
    }
    
    function whatChat(chat){
@@ -63,9 +65,20 @@ export default function Profile(props) {
             // children[i].setClass()
             children[i].setAttribute('class','hidden')
         }
-        console.log(children[i])
+        // console.log(children[i])
     }
    }
+   const sendAMessage = (event) => {
+    event.preventDefault()
+    console.log(messageTextData)
+    console.log(event.target.value)
+   }
+   const handleChange = (e) => {
+    e.preventDefault();
+    const {value} = e.target;
+    setMessageData(value)
+    
+  }
       return (
         <div>
             <h1>Profile</h1>
@@ -86,7 +99,10 @@ export default function Profile(props) {
                         <h3 className="messageText">{message.messageText}</h3>
                         </div>
                     ))}
+                    Message:<textarea className="messageText" name={whatChat(chat)} value={messageTextData} onChange={handleChange}></textarea>
+                    <button onClick={sendAMessage} name={whatChat(chat)}>Send Message</button>
                     </div>
+
             ))}
             </aside>
         </div>
