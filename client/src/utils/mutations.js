@@ -22,7 +22,6 @@ mutation Login($email: String!, $password: String!) {
   user {
     username
     email
-    
     messages{
       sender
       receiver
@@ -46,3 +45,14 @@ mutation SendMessage($messageText: String!, $receiver: String, $sender: String) 
   }
 }
 `
+
+export const ADD_RECIPE = gql `
+mutation Mutation($input: RecipeInput!) {
+  addRecipe(input: $input) {
+    _id
+    recipeName
+    ingredients
+    estimatedTime
+    description
+  }
+}`
