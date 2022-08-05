@@ -82,17 +82,18 @@ export default function Profile(props) {
   }
       return (
         <div>
-            <h1>Profile</h1>
-            <h2>Username: {username}</h2>
-            <h2>email: {email}</h2>
+          <div className="profile-info">
+            <h2>Welcome {username}</h2>
+            <h2>{email}</h2>
             {loading && (
                 <h3>LOADING...</h3>
             )}
+          </div>
 
-            <aside className="Chats">
+            <div className="chatbox">
             {!loading && messages && 
                 chats.map(chat=>(
-                    <div onClick={revealChat} key={chat[0]._id + "3"} className="Chat">
+                    <div onClick={revealChat} key={chat[0]._id + "3"} id="chat">
                         {whatChat(chat)}
                     {chat && chat.map(message=>(
                         <div className="hidden"key={message._id}>
@@ -104,7 +105,7 @@ export default function Profile(props) {
                     </div>
 
             ))}
-            </aside>
+            </div>
             <form className="messageForm">
             receiver:<input name="receiver" defaultValue={messageFormData.receiver} onBlur={handleChange}></input>
             Message:<textarea name="messageText" className="messageTextArea" defaultValue={messageFormData.messageText} onBlur={handleChange}></textarea>
